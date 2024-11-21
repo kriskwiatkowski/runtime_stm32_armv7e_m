@@ -52,8 +52,8 @@ target_include_directories(
         ${CMAKE_SOURCE_DIR}/inc)
 
 add_custom_target(libopencm3
-    COMMAND FP_FLAGS="-mfloat-abi=soft"
-    CFLAGS='-fno-asynchronous-unwind-tables' CC=${CMAKE_C_COMPILER} make V=1 TARGETS='stm32/f4'
+    COMMAND FP_FLAGS="-mfloat-abi=soft" CFLAGS='-fno-asynchronous-unwind-tables' CC=${CMAKE_C_COMPILER} make V=1 TARGETS='stm32/f4'
+    COMMAND FP_FLAGS="-mfloat-abi=soft" CFLAGS='-fno-asynchronous-unwind-tables' CC=${CMAKE_C_COMPILER} make V=1 TARGETS='stm32/l4'
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/3rd/libopencm3)
 
 add_dependencies(${MAIN_TARGET} libopencm3)
@@ -67,6 +67,7 @@ install(
 install(
     FILES
         ${CMAKE_BINARY_DIR}/3rd/libopencm3/lib/libopencm3_stm32f4.a
+        ${CMAKE_BINARY_DIR}/3rd/libopencm3/lib/libopencm3_stm32l4.a
         ${CMAKE_SOURCE_DIR}/src/stm32f405x6.ld
     DESTINATION
         ${CMAKE_INSTALL_LIBDIR})

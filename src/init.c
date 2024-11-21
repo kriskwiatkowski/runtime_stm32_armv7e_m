@@ -21,6 +21,26 @@
 #include <platform/stm32f4.h>
 #include <stddef.h>
 
+#if defined(STM32L4R5ZI)
+#include <libopencm3/stm32/pwr.h>
+
+#define SERIAL_GPIO GPIOG
+#define SERIAL_USART LPUART1
+#define SERIAL_PINS (GPIO8 | GPIO7)
+#define NUCLEO_L4R5_BOARD
+
+/* Patched function for newer PLL not yet supported by opencm3 */
+void _rcc_set_main_pll(uint32_t source, uint32_t pllm, uint32_t plln,
+                       uint32_t pllp, uint32_t pllq, uint32_t pllr) {
+  RCC_PLLCFGR = (RCC_PLLCFGR_PLLM(pllm) << RCC_PLLCFGR_PLLM_SHIFT) |
+                (plln << RCC_PLLCFGR_PLLN_SHIFT) |
+                ((pllp & 0x1Fu) << 27u) | /* NEWER PLLP */
+                (source << RCC_PLLCFGR_PLLSRC_SHIFT) |
+                (pllq << RCC_PLLCFGR_PLLQ_SHIFT) |
+                (pllr << RCC_PLLCFGR_PLLR_SHIFT) | RCC_PLLCFGR_PLLREN;
+}
+#endif
+
 /// ############################
 /// Internal implementation
 /// ############################
